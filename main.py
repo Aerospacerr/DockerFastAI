@@ -1,10 +1,10 @@
-# from model import model_pipeline
+from model_starter import model_pipeline
 
 from fastapi import FastAPI
 
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile
 from PIL import Image
 import io
 
@@ -25,4 +25,8 @@ def read_item(item_id: int, q: Union[str, None] = None):
 def ask(text: str, image: UploadFile):
     content = image.file.read()
 
-    image = Image(io.BytesIO(content))
+    # image = Image(image.file)
+    image = Image.open(io.BytesIO(content))
+
+    result = model_pipeline(text, image)
+    return {"answer": result}
